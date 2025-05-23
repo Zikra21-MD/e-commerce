@@ -26,3 +26,11 @@ Route::middleware('auth:sanctum')->get('/profil', function (Request $request) {
 Route::get('/wilayah', function () {
     return Wilayah::all();
 });
+
+Route::middleware(['auth:sanctum'])->prefix('penjual')->group(function () {
+    Route::get('products', [\App\Http\Controllers\API\Penjual\ProductController::class, 'index']);
+    Route::post('products', [\App\Http\Controllers\API\Penjual\ProductController::class, 'store']);
+    Route::get('products/{id}', [\App\Http\Controllers\API\Penjual\ProductController::class, 'show']);
+    Route::put('products/{id}', [\App\Http\Controllers\API\Penjual\ProductController::class, 'update']);
+    Route::delete('products/{id}', [\App\Http\Controllers\API\Penjual\ProductController::class, 'destroy']);
+});
