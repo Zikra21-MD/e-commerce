@@ -1,0 +1,27 @@
+<?php
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+class AdminController extends Controller
+{
+    public function masuk(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || $user->role !== 'admin' || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Email, password, atau peran tidak cocok'], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Masuk sebagai admin berhasil',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
+    }
+}
